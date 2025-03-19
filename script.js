@@ -1,5 +1,5 @@
 async function fetchCourses() {
-    const tabledata = document.getElementById("courseTable");
+    const tabledata = document.getElementById("datas");
     tabledata.innerHTML = "<tr><td colspan='4'>Loading...</td></tr>"; // Show loading
 
     for (let i = 0; i < 3; i++) { // Retry 3 times if the server is slow
