@@ -29,7 +29,7 @@ async function fetchCourses() {
 }
 
 async function fetchEnrolledCandidates() {
-    const tabledata = document.getElementById("enrolledTable");
+    const tabledata = document.getElementById("datas");
     tabledata.innerHTML = "<tr><td colspan='3'>Loading...</td></tr>"; // Show loading
 
     for (let i = 0; i < 3; i++) { // Retry 3 times if the server is slow
