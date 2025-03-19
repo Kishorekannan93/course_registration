@@ -122,10 +122,11 @@
             <tbody id="datas"></tbody>
         </table>
     </div>
-    <script>
-        window.onload = function() {
-           showEnrolledCandidates();
-        };
-    </script>
+   <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        showEnrolledCandidates(); // ✅ Call this instead if needed
+    });
+</script>
+
 </body>
 </html>
