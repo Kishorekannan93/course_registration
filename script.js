@@ -1,13 +1,23 @@
 async function fetchCourses() {
+    console.log("Fetching course data..."); // Debugging log
     const tabledata = document.getElementById("courseData");
-    tabledata.innerHTML = "<tr><td colspan='4'>Loading...</td></tr>"; // Show loading message
+
+    if (!tabledata) {
+        console.error("Element with ID 'courseData' not found!");
+        return;
+    }
+
+    tabledata.innerHTML = "<tr><td colspan='4'>Loading...</td></tr>";
 
     try {
         let res = await fetch("https://courseback-2vyg.onrender.com/course");
-        if (!res.ok) throw new Error("Failed to fetch course data");
+        console.log("Response received:", res); // Debugging log
+
+        if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
 
         let data = await res.json();
-        tabledata.innerHTML = ""; // Clear previous data
+        console.log("Course Data:", data); // Debugging log
+        tabledata.innerHTML = ""; 
 
         data.forEach(item => {
             let row = `<tr>
@@ -19,21 +29,31 @@ async function fetchCourses() {
             tabledata.innerHTML += row;
         });
     } catch (error) {
-        console.error("Error:", error);
+        console.error("Error fetching courses:", error);
         tabledata.innerHTML = "<tr><td colspan='4'>Failed to load course data.</td></tr>";
     }
 }
 
 async function fetchEnrolledCandidates() {
+    console.log("Fetching enrolled candidates data..."); // Debugging log
     const tabledata = document.getElementById("enrolledData");
-    tabledata.innerHTML = "<tr><td colspan='3'>Loading...</td></tr>"; // Show loading message
+
+    if (!tabledata) {
+        console.error("Element with ID 'enrolledData' not found!");
+        return;
+    }
+
+    tabledata.innerHTML = "<tr><td colspan='3'>Loading...</td></tr>";
 
     try {
         let res = await fetch("https://courseback-2vyg.onrender.com/course/enrolled");
-        if (!res.ok) throw new Error("Failed to fetch enrolled candidates data");
+        console.log("Response received:", res); // Debugging log
+
+        if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
 
         let data = await res.json();
-        tabledata.innerHTML = ""; // Clear previous data
+        console.log("Enrolled Candidates Data:", data); // Debugging log
+        tabledata.innerHTML = ""; 
 
         data.forEach(item => {
             let row = `<tr>
@@ -44,7 +64,7 @@ async function fetchEnrolledCandidates() {
             tabledata.innerHTML += row;
         });
     } catch (error) {
-        console.error("Error:", error);
+        console.error("Error fetching enrolled candidates:", error);
         tabledata.innerHTML = "<tr><td colspan='3'>Failed to load enrolled candidates.</td></tr>";
     }
 }
