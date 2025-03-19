@@ -1,5 +1,5 @@
 function showCourse(){
-    fetch("http://localhost:8080/course")
+    fetch("https://courseback-2vyg.onrender.com/course")
     .then((res)=>res.json())
     .then((data)=>{
         const tabledata = document.getElementById("datas");
@@ -19,7 +19,7 @@ function showCourse(){
 }
 
 function showCourse1(){
-    fetch("http://localhost:8080/course/enrolled")
+    fetch("https://courseback-2vyg.onrender.com/course/enrolled")
     .then((res)=>res.json())
     .then((data)=>{
         const tabledata = document.getElementById("datas");
