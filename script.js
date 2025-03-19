@@ -1,42 +1,38 @@
-function showCourse(){
-    fetch("https://courseback-2vyg.onrender.com/course")
-    .then((res)=>res.json())
-    .then((data)=>{
-        const tabledata = document.getElementById("datas");
+async function fetchData(url, tableId) {
+    const tabledata = document.getElementById(tableId);
+    tabledata.innerHTML = "<tr><td colspan='4'>Loading...</td></tr>"; // Show loading
 
-       data.forEach(data =>{
-        var row =  `<td>${data.courseId}</td>
-        <td>${data.courseName}</td>
-        <td>${data.trainer}</td>
-        <td>${data.durationInWeeks}</td>
-        `
+    for (let i = 0; i < 3; i++) { // Retry 3 times if the server is slow
+        try {
+            let res = await fetch(url);
+            if (!res.ok) throw new Error("Server not ready");
 
-        tabledata.innerHTML += row;
-       })
-       
+            let data = await res.json();
+            tabledata.innerHTML = ""; // Clear previous data
+
+            data.forEach(item => {
+                let row = `<tr>
+                    <td>${item.courseId || item.name}</td>
+                    <td>${item.courseName || item.emailId}</td>
+                    <td>${item.trainer || ""}</td>
+                    <td>${item.durationInWeeks || ""}</td>
+                </tr>`;
+                tabledata.innerHTML += row;
+            });
+            return; // Exit if successful
+        } catch (error) {
+            console.error(`Retrying... (${i + 1}/3)`);
+            await new Promise(res => setTimeout(res, 2000)); // Wait 2 sec before retrying
+        }
     }
-    )
+    tabledata.innerHTML = "<tr><td colspan='4'>Failed to load data.</td></tr>"; // Show error
 }
 
-function showCourse1(){
-    fetch("https://courseback-2vyg.onrender.com/course/enrolled")
-    .then((res)=>res.json())
-    .then((data)=>{
-        const tabledata = document.getElementById("datas");
+// ✅ Use these two functions for fetching data
+function showCourse() {
+    fetchData("https://courseback-2vyg.onrender.com/course", "datas");
+}
 
-       data.forEach(data =>{
-        var row =  `<td>${data.name}</td>
-        <td>${data.emailId}</td>
-        <td>${data.courseName}</td>
-   
-        `
-
-        tabledata.innerHTML += row;
-       })
-       
-    }
-    )
-
-
-    
+function showCourse1() {
+    fetchData("https://courseback-2vyg.onrender.com/course/enrolled", "datas");
 }
