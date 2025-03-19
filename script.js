@@ -1,49 +1,50 @@
-// Generic function to fetch data
-async function fetchData(url, tableId) {
-    const tabledata = document.getElementById(tableId);
-    tabledata.innerHTML = "<tr><td colspan='4'>Loading...</td></tr>"; // Show loading
+async function fetchCourses() {
+    const tabledata = document.getElementById("courseData");
+    tabledata.innerHTML = "<tr><td colspan='4'>Loading...</td></tr>"; // Show loading message
 
-    for (let i = 0; i < 3; i++) { // Retry 3 times if the server is slow
-        try {
-            let res = await fetch(url);
-            if (!res.ok) throw new Error("Server not ready");
+    try {
+        let res = await fetch("https://courseback-2vyg.onrender.com/course");
+        if (!res.ok) throw new Error("Failed to fetch course data");
 
-            let data = await res.json();
-            tabledata.innerHTML = ""; // Clear previous data
+        let data = await res.json();
+        tabledata.innerHTML = ""; // Clear previous data
 
-            data.forEach(item => {
-                let row;
-                if (url.includes("enrolled")) { // If enrolled data
-                    row = `<tr>
-                        <td>${item.name}</td>
-                        <td>${item.emailId}</td>
-                        <td>${item.courseName}</td>
-                    </tr>`;
-                } else { // If course list
-                    row = `<tr>
-                        <td>${item.courseId}</td>
-                        <td>${item.courseName}</td>
-                        <td>${item.trainer}</td>
-                        <td>${item.durationInWeeks}</td>
-                    </tr>`;
-                }
-                tabledata.innerHTML += row;
-            });
-            return; // Exit if successful
-        } catch (error) {
-            console.error(`Retrying... (${i + 1}/3)`);
-            await new Promise(res => setTimeout(res, 2000)); // Wait 2 sec before retrying
-        }
+        data.forEach(item => {
+            let row = `<tr>
+                <td>${item.courseId}</td>
+                <td>${item.courseName}</td>
+                <td>${item.trainer}</td>
+                <td>${item.durationInWeeks}</td>
+            </tr>`;
+            tabledata.innerHTML += row;
+        });
+    } catch (error) {
+        console.error("Error:", error);
+        tabledata.innerHTML = "<tr><td colspan='4'>Failed to load course data.</td></tr>";
     }
-    tabledata.innerHTML = "<tr><td colspan='4'>Failed to load data.</td></tr>"; // Show error
 }
 
-// ✅ Call these functions separately
-function showCourse() {
-    fetchData("https://courseback-2vyg.onrender.com/course", "datas_course");
-}
+async function fetchEnrolledCandidates() {
+    const tabledata = document.getElementById("enrolledData");
+    tabledata.innerHTML = "<tr><td colspan='3'>Loading...</td></tr>"; // Show loading message
 
-function showCourse1() {
-    fetchData("https://courseback-2vyg.onrender.com/course/enrolled", "datas_enrolled");
-}
+    try {
+        let res = await fetch("https://courseback-2vyg.onrender.com/course/enrolled");
+        if (!res.ok) throw new Error("Failed to fetch enrolled candidates data");
 
+        let data = await res.json();
+        tabledata.innerHTML = ""; // Clear previous data
+
+        data.forEach(item => {
+            let row = `<tr>
+                <td>${item.name}</td>
+                <td>${item.emailId}</td>
+                <td>${item.courseName}</td>
+            </tr>`;
+            tabledata.innerHTML += row;
+        });
+    } catch (error) {
+        console.error("Error:", error);
+        tabledata.innerHTML = "<tr><td colspan='3'>Failed to load enrolled candidates.</td></tr>";
+    }
+}
