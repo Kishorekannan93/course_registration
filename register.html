@@ -120,39 +120,44 @@
         <div id="responseMessage"></div>
     </form>
 
-    <script>
-        document.getElementById("registerForm").addEventListener("submit", function(event) {
-            event.preventDefault(); // Prevent default form submission
+   <script>
+    document.getElementById("registerForm").addEventListener("submit", function(event) {
+        event.preventDefault(); // Prevent default form submission
 
-            let name = document.getElementById("name").value;
-            let emailId = document.getElementById("emailId").value;
-            let courseName = document.getElementById("courseName").value;
+        let name = document.getElementById("name").value;
+        let emailId = document.getElementById("emailId").value;
+        let courseName = document.getElementById("courseName").value;
+        let messageDiv = document.getElementById("responseMessage");
 
-            let formData = {
-                name: name,
-                emailId: emailId,
-                courseName: courseName
-            };
+        let formData = {
+            name: name,
+            emailId: emailId,
+            courseName: courseName
+        };
 
-            fetch("https://courseback-2vyg.onrender.com/register", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"  
-                },
-                body: JSON.stringify(formData)  
-            })
-            .then(response => response.text())  
-            .then(data => {
-                let messageDiv = document.getElementById("responseMessage");
-                messageDiv.innerText = data;
-                messageDiv.style.display = "block";
-            })
-            setTimeout(()=>{
-                window.location.href = "index.html"
-            },3000)
-            .catch(error => console.error("Error:", error));
+        fetch("https://courseback-2vyg.onrender.com/register", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(formData)
+        })
+        .then(response => response.text())  
+        .then(data => {
+            messageDiv.innerText = data;
+            messageDiv.style.display = "block";
+            messageDiv.style.backgroundColor = "#d4edda"; // Success color
+            setTimeout(() => {
+                window.location.href = "./index.html"; // Ensure correct path
+            }, 3000);
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            messageDiv.innerText = "Registration failed. Please try again!";
+            messageDiv.style.display = "block";
+            messageDiv.style.backgroundColor = "#f8d7da"; // Error color
         });
-    </script>
+    });
+</script>
+
 
 </body>
 </html>
