@@ -121,10 +121,11 @@
             <tbody id="datas"></tbody>
         </table>
     </div>
+     <script type="text/javascript" src="script.js"></script>
     <script>
-        window.onload = function() {
-            showCourse();
-        };
+        document.addEventListener("DOMContentLoaded", function() {
+            showCourse(); // Ensures this runs only after DOM loads
+        });
     </script>
 </body>
 </html>
