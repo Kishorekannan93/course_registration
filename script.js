@@ -1,3 +1,4 @@
+// Generic function to fetch data
 async function fetchData(url, tableId) {
     const tabledata = document.getElementById(tableId);
     tabledata.innerHTML = "<tr><td colspan='4'>Loading...</td></tr>"; // Show loading
@@ -11,12 +12,21 @@ async function fetchData(url, tableId) {
             tabledata.innerHTML = ""; // Clear previous data
 
             data.forEach(item => {
-                let row = `<tr>
-                    <td>${item.courseId || item.name}</td>
-                    <td>${item.courseName || item.emailId}</td>
-                    <td>${item.trainer || ""}</td>
-                    <td>${item.durationInWeeks || ""}</td>
-                </tr>`;
+                let row;
+                if (url.includes("enrolled")) { // If enrolled data
+                    row = `<tr>
+                        <td>${item.name}</td>
+                        <td>${item.emailId}</td>
+                        <td>${item.courseName}</td>
+                    </tr>`;
+                } else { // If course list
+                    row = `<tr>
+                        <td>${item.courseId}</td>
+                        <td>${item.courseName}</td>
+                        <td>${item.trainer}</td>
+                        <td>${item.durationInWeeks}</td>
+                    </tr>`;
+                }
                 tabledata.innerHTML += row;
             });
             return; // Exit if successful
@@ -28,11 +38,12 @@ async function fetchData(url, tableId) {
     tabledata.innerHTML = "<tr><td colspan='4'>Failed to load data.</td></tr>"; // Show error
 }
 
-// ✅ Use these two functions for fetching data
+// ✅ Call these functions separately
 function showCourse() {
-    fetchData("https://courseback-2vyg.onrender.com/course", "datas");
+    fetchData("https://courseback-2vyg.onrender.com/course", "datas_course");
 }
 
 function showCourse1() {
-    fetchData("https://courseback-2vyg.onrender.com/course/enrolled", "datas");
+    fetchData("https://courseback-2vyg.onrender.com/course/enrolled", "datas_enrolled");
 }
+
